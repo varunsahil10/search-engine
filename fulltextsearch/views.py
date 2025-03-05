@@ -4,6 +4,12 @@ from .models import *
 
 def home(request):
     products = Product.objects.all()
+    # print(request)
+    if request.method == 'GET':
+        print(request.GET)
+        query = request.GET.get('q',None)
+        if query:
+            products = products.filter(name__icontains=query)
     context = {
         'products': products,
     }
