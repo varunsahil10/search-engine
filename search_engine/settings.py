@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'fulltextsearch',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [
