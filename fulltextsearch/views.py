@@ -24,9 +24,6 @@ def home(request):
 
         '''
         full text search using postgres module (Using SearchVector only)
-
-        1. for searching on more than 1 field
-        2. blues, blueing ..
         '''
         # vector = SearchVector('name','description')
         # query = q
@@ -35,9 +32,6 @@ def home(request):
 
         '''
         full text search using postgres module (Using SearchVector and SearchQuery only)
-
-        1. for searching on more than 1 field
-        2. blues, blueing ..
         '''
         # vector = SearchVector('name','description')
         # query = SearchQuery(q)
@@ -46,11 +40,23 @@ def home(request):
 
         '''
         full text search using postgres module (Using SearchVector and SearchQuery and SearchRank)
-
-        1. for searching on more than 1 field
-        2. blues, blueing ..
         '''
-        vector = SearchVector('name','description')
+        # vector = SearchVector('name','description')
+        # query = SearchQuery(q)
+        # rank = SearchRank(vector,query)
+
+        # products = products.annotate(rank = rank).filter(rank__gte=0.001).order_by('-rank')
+
+        '''
+        full text search using postgres module (Using SearchVector and SearchQuery and SearchRank)
+        with ranking
+        '''
+        vector = (
+            SearchVector('name', weight='B') +
+            SearchVector('description', weight='A')
+            SearchVector('color', weight='C') +
+            SearchVector('gender', weight='D')
+            )
         query = SearchQuery(q)
         rank = SearchRank(vector,query)
 
