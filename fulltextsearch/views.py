@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank
+from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank, SearchHeadline
 from .models import *
 
 # Create your views here.
@@ -51,33 +51,54 @@ def home(request):
         full text search using postgres module (Using SearchVector and SearchQuery and SearchRank)
         with ranking
         '''
+        # vector = (
+        #     SearchVector('name', weight='B') +
+        #     SearchVector('description', weight='A') +
+        #     SearchVector('color', weight='C') +
+        #     SearchVector('gender', weight='D')
+        #     )
+        # # query = SearchQuery(q, search_type="phrase")
+        
+        # # Dynamically query generator
+
+        # search_terms = q.split()
+        # query = SearchQuery(search_terms[0])
+        # # Loop through remaining terms and combine with OR operator
+        # if len(search_terms) > 1:
+        #     for term in search_terms[1:]:
+        #         query &= SearchQuery(term)
+
+        # # # query =  SearchQuery("bag") | SearchQuery("women")
+
+
+        # rank = SearchRank(vector,query)
+
+        # products = products.annotate(rank = rank).filter(rank__gte=0.001).order_by('-rank')
+
+        '''
+        full text search using postgres module (Using SearchVector and SearchQuery and SearchRank)
+        with ranking and searchheadline
+        '''
         vector = (
             SearchVector('name', weight='B') +
             SearchVector('description', weight='A') +
             SearchVector('color', weight='C') +
             SearchVector('gender', weight='D')
             )
-        # query = SearchQuery(q, search_type="phrase")
-        
-        # Dynamically query generator
-
-        search_terms = q.split()
-        query = SearchQuery(search_terms[0])
-        # Loop through remaining terms and combine with OR operator
-        if len(search_terms) > 1:
-            for term in search_terms[1:]:
-                query &= SearchQuery(term)
-
-        # # query =  SearchQuery("bag") | SearchQuery("women")
-
+        query = SearchQuery(q)
+        search_headline = SearchHeadline('description',query)
 
         rank = SearchRank(vector,query)
 
-        products = products.annotate(rank = rank).filter(rank__gte=0.001).order_by('-rank')
+        products = products.annotate(
+            rank = rank,
+            search_headline = search_headline
+            ).filter(rank__gte=0.001).order_by('-rank')
 
         print(vector)
         print(query)
         print(rank)
+        print(search_headline)
     
     context = {
         'products': products,

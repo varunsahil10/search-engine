@@ -21,6 +21,7 @@
       <th>Price</th>
       <th>Description</th>
       <th>Color</th>
+      <th>Search headline</th>
       <th>Rank</th>
     </tr>
   </thead>
@@ -36,6 +37,7 @@
       <td>{{product.price}}</td>
       <td>{{product.description}}</td>
       <td>{{product.color}}</td>
+      <td>{{product.search_headline | safe}}</td>
       <td>{{product.rank}}</td>
     </tr>
     {% endfor %}
