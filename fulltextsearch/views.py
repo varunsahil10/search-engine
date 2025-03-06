@@ -115,11 +115,16 @@ def trigramsearch(request):
 
     q = request.GET.get('q','')
     if q:
-        vector = SearchVector('name','description','brand', 'color')
+        vector = (
+            SearchVector('name', weight='B') +
+            SearchVector('description', weight='A') +
+            SearchVector('color', weight='C') +
+            SearchVector('gender', weight='D')
+            )
         query = SearchQuery(q)
         rank = SearchRank(vector,query)
 
-        Q_expression = Q(similarity__gte=0.3) & Q(rank__gte=0.3)
+        Q_expression = Q(similarity__gte=0.1) & Q(rank__gte=0.1)
         
         products = products.annotate(
             rank = rank,
