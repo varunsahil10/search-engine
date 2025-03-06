@@ -1,5 +1,12 @@
 {% extends "base.html" %}
 
+{% block head %}
+  <title>Trigram search</title>
+  {{block.super}}
+
+{% endblock head %}
+
+
 {% block body %}
 
 <nav class="navbar navbar-light bg-light">
@@ -17,6 +24,8 @@
         <option value="{{color.color}}" {% if request.GET.color == color.color %}selected{% endif %}>{{color.color}}</option>
       {% endfor %}
     </select>
+
+
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
   </form>
 </nav>
@@ -55,5 +64,6 @@
     {% endfor %}
   </tbody>
 </table>
-    
+
+
 {% endblock body %}     
