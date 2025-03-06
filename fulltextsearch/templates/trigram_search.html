@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block body %}
+
+<nav class="navbar navbar-light bg-light">
+  <form class="form-inline" method="get">
+    <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" value="{{q}}">
+    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+  </form>
+</nav>
+
+<h3>Total results: {{products|length}}</h3>
+<table class="table table-striped">
+  <thead>
+    <tr>
+      <th>#</th>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Brand</th>
+      <th>Gender</th>
+      <th>Price</th>
+      <th>Description</th>
+      <th>Color</th>
+      <th>Rank</th>
+      <th>similarity</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+    {% for product in products %}
+    <tr>
+      <th>{{forloop.counter}}</th>
+      <td>{{product.pid}}</td>
+      <td>{{product.name}}</td>
+      <td>{{product.brand}}</td>
+      <td>{{product.gender}}</td>
+      <td>{{product.price}}</td>
+      <td>{{product.description}}</td>
+      <td>{{product.color}}</td>
+      <td>{{product.rank}}</td>
+      <td>{{product.similarity}}</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+    
+{% endblock body %}     

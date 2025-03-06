@@ -1,7 +1,8 @@
 from django.shortcuts import render
-from django.contrib.postgres.search import SearchQuery, SearchVector, SearchRank, SearchHeadline
+from django.contrib.postgres.search import (SearchQuery, SearchVector, SearchRank, 
+                                            SearchHeadline, TrigramSimilarity)
 from .models import *
-
+from django.db.models import Q
 # Create your views here.
 
 def home(request):
@@ -105,3 +106,31 @@ def home(request):
         'q':q,
     }
     return render(request,'index.html',context)
+
+
+
+def trigramsearch(request):
+
+    products = Product.objects.all()
+
+    q = request.GET.get('q','')
+    if q:
+        vector = SearchVector('name','description','brand', 'color')
+        query = SearchQuery(q)
+        rank = SearchRank(vector,query)
+
+        Q_expression = Q(similarity__gte=0.3) & Q(rank__gte=0.3)
+        
+        products = products.annotate(
+            rank = rank,
+            similarity = TrigramSimilarity('name',q) + 
+                        TrigramSimilarity('description',q) +
+                        TrigramSimilarity('brand',q) +
+                        TrigramSimilarity('color',q)
+        ).filter(Q_expression).order_by('-rank','-similarity',)
+
+    context = {
+        'products': products,
+        'q':q,
+    }
+    return render(request, 'trigram_search.html', context)
