@@ -53,11 +53,24 @@ def home(request):
         '''
         vector = (
             SearchVector('name', weight='B') +
-            SearchVector('description', weight='A')
+            SearchVector('description', weight='A') +
             SearchVector('color', weight='C') +
             SearchVector('gender', weight='D')
             )
-        query = SearchQuery(q)
+        # query = SearchQuery(q, search_type="phrase")
+        
+        # Dynamically query generator
+
+        search_terms = q.split()
+        query = SearchQuery(search_terms[0])
+        # Loop through remaining terms and combine with OR operator
+        if len(search_terms) > 1:
+            for term in search_terms[1:]:
+                query &= SearchQuery(term)
+
+        # # query =  SearchQuery("bag") | SearchQuery("women")
+
+
         rank = SearchRank(vector,query)
 
         products = products.annotate(rank = rank).filter(rank__gte=0.001).order_by('-rank')
