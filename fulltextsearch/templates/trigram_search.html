@@ -5,6 +5,18 @@
 <nav class="navbar navbar-light bg-light">
   <form class="form-inline" method="get">
     <input name="q" class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" value="{{q}}">
+    <select name="brand" id="brand">
+      <option value="">Select brand</option>
+      {% for brand in brands %}
+        <option value="{{brand.brand}}" {% if request.GET.brand == brand.brand %}selected{% endif %}>{{brand.brand}}</option>
+      {% endfor %}
+    </select>
+    <select name="color" id="color">
+      <option value="">Select color</option>
+      {% for color in colors %}
+        <option value="{{color.color}}" {% if request.GET.color == color.color %}selected{% endif %}>{{color.color}}</option>
+      {% endfor %}
+    </select>
     <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
   </form>
 </nav>

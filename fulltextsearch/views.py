@@ -112,8 +112,12 @@ def home(request):
 def trigramsearch(request):
 
     products = Product.objects.all()
+    data = request.GET
+    q = data.get('q','')
+    brand = data.get('brand','')
+    color = data.get('color','')
 
-    q = request.GET.get('q','')
+    #Full text search: fuzzy text optimization
     if q:
         vector = (
             SearchVector('name', weight='B') +
@@ -134,8 +138,22 @@ def trigramsearch(request):
                         TrigramSimilarity('color',q)
         ).filter(Q_expression).order_by('-rank','-similarity',)
 
+    if brand:
+        products = products.filter(brand=brand)
+    
+    if color:
+        products = products.filter(color=color)
+
+    
+    brands = Product.objects.all().distinct('brand')
+    colors = Product.objects.all().distinct('color')
+
     context = {
         'products': products,
+        'brands': brands,
+        'colors': colors,
+        'brand': brand,
+        'color': color,
         'q':q,
     }
     return render(request, 'trigram_search.html', context)
