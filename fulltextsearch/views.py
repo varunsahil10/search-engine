@@ -110,7 +110,7 @@ def home(request):
 
 
 def trigramsearch(request):
-
+    print("inside view")
     products = Product.objects.all()
     data = request.GET
     q = data.get('q','')

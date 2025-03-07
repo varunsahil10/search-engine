@@ -55,6 +55,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'fulltextsearch.middleware.BrotherMiddleware',
+    'fulltextsearch.middleware.FatherMiddleware',
+    'fulltextsearch.middleware.MotherMiddleware',
 ]
 
 ROOT_URLCONF = 'search_engine.urls'
