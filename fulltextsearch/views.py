@@ -1,6 +1,7 @@
-from django.shortcuts import render
+# from django.shortcuts import render
 from django.contrib.postgres.search import (SearchQuery, SearchVector, SearchRank, 
                                             SearchHeadline, TrigramSimilarity)
+from django.template.response import TemplateResponse as render
 from .models import *
 from django.db.models import Q
 # Create your views here.
@@ -111,6 +112,7 @@ def home(request):
 
 def trigramsearch(request):
     print("inside view")
+    # print(10/0)
     products = Product.objects.all()
     data = request.GET
     q = data.get('q','')
@@ -155,5 +157,6 @@ def trigramsearch(request):
         'brand': brand,
         'color': color,
         'q':q,
+        'inMiddleware': False,
     }
     return render(request, 'trigram_search.html', context)
